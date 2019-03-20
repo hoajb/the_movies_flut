@@ -14,9 +14,9 @@ class API {
 
 
 
-  static Future<List<MovieData>> getTheMovieList(String page) async {
+  static Future<List<MovieData>> getTheMovieList(int page) async {
     final uri = Uri.https(_url, _url_prefix + '/movie/now_playing',
-        {'page': page, 'api_key': _url_api_key});
+        {'page': page.toString(), 'api_key': _url_api_key});
 
     final jsonResponse = await _getJson(uri);
     if (jsonResponse == null) {

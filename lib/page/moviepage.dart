@@ -49,7 +49,7 @@ class _MoviePageState extends State<MoviePage> {
   }
 
   Future<List<MovieData>> _fetchDataFuture() async {
-    return API.getTheMovieList("1");
+    return API.getTheMovieList(1);
   }
 
   @override
@@ -147,7 +147,7 @@ class MovieTileState extends State<MovieTile> {
   }
 
   _fetchData(int page) async {
-    var postList = await API.getTheMovieList(page.toString());
+    var postList = await API.getTheMovieList(page);
     if (postList == null) {
 //      _error = "Error API";
     } else {
