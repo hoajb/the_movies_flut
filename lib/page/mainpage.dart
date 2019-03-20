@@ -19,39 +19,74 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("The Movies"),
-        ),
-        body: PageView(
-          children: [
-            HomePage(),
-            TrailersPage(),
-            ProgressPage(),
+      appBar: AppBar(
+        title: Text("The Movies"),
+      ),
+      body: PageView(
+        children: [
+          HomePage(),
+          TrailersPage(),
+          ProgressPage(),
+        ],
+        controller: _pageController,
+        onPageChanged: _onPageChanged,
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: _onBottomNavigationBarTap,
+          fixedColor: Colors.orange,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                backgroundColor: Colors.white10,
+                title: Text(
+                  "Home",
+                )),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.playlist_play),
+                backgroundColor: Colors.white10,
+                title: Text("Trailers")),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.list),
+                backgroundColor: Colors.white10,
+                title: Text("Progress")),
+          ]),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Drawer Header'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text('Home'),
+              onTap: () {
+                _onBottomNavigationBarTap(0);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Trailers'),
+              onTap: () {
+                _onBottomNavigationBarTap(1);
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              title: Text('Progress'),
+              onTap: () {
+                _onBottomNavigationBarTap(2);
+                Navigator.pop(context);
+              },
+            ),
           ],
-          controller: _pageController,
-          onPageChanged: _onPageChanged,
         ),
-        bottomNavigationBar: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            onTap: _onBottomNavigationBarTap,
-            fixedColor: Colors.orange,
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  backgroundColor: Colors.white10,
-                  title: Text(
-                    "Home",
-                  )),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.playlist_play),
-                  backgroundColor: Colors.white10,
-                  title: Text("Trailers")),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.list),
-                  backgroundColor: Colors.white10,
-                  title: Text("Progress")),
-            ]));
+      ),
+    );
   }
 
   void _onBottomNavigationBarTap(int page) {
