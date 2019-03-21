@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movies_flut/resource/app_resources.dart';
 
 import 'page/mainpage.dart';
 
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        primarySwatch: AppColors.colorThemePrimary,
       ),
       home: MainPage(),
     );

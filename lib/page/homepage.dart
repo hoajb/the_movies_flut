@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_movies_flut/page/rowlistmovies.dart';
+import 'package:the_movies_flut/resource/app_resources.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -11,13 +12,16 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          RowMovies(title: "Popular"),
-          RowMovies(title: "Popular"),
-          RowMovies(title: "Popular"),
-        ],
+    return Container(
+      color: AppColors.colorThemePrimary,
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            RowMovies(title: "Popular", iconData: Icons.featured_play_list ),
+            RowMovies(title: "Now Playing", iconData: Icons.movie),
+            RowMovies(title: "On TV", iconData: Icons.live_tv),
+          ],
+        ),
       ),
     );
   }
@@ -30,9 +34,10 @@ class _HomePageState extends State<HomePage> {
 
 class RowMovies extends StatelessWidget {
   final String title;
+  final IconData iconData;
   final Color colorText = Colors.white70;
 
-  const RowMovies({Key key, this.title}) : super(key: key);
+  const RowMovies({Key key, this.title, this.iconData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +47,15 @@ class RowMovies extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(10.0),
           decoration: BoxDecoration(
-              color: Color.fromRGBO(64, 75, 96, 0.8),
+              color: AppColors.colorThemePrimary[800],
+              border: null,
               borderRadius: BorderRadius.all(Radius.circular(5.0))),
           child: Column(
             children: <Widget>[
               Row(
                 children: <Widget>[
                   Icon(
-                    Icons.view_list,
+                    iconData,
                     color: colorText,
                   ),
                   Expanded(
@@ -60,7 +66,7 @@ class RowMovies extends StatelessWidget {
                             style: TextStyle(color: colorText),
                           ))),
                   Icon(
-                    Icons.menu,
+                    Icons.more_vert,
                     color: colorText,
                   ),
                 ],

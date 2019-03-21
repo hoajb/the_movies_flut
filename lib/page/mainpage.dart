@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:the_movies_flut/resource/app_resources.dart';
 
 import 'homepage.dart';
 import 'progresspage.dart';
@@ -31,27 +32,37 @@ class _MainPageState extends State<MainPage> {
         controller: _pageController,
         onPageChanged: _onPageChanged,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: _onBottomNavigationBarTap,
-          fixedColor: Colors.orange,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                backgroundColor: Colors.white10,
-                title: Text(
-                  "Home",
-                )),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.playlist_play),
-                backgroundColor: Colors.white10,
-                title: Text("Trailers")),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.list),
-                backgroundColor: Colors.white10,
-                title: Text("Progress")),
-          ]),
+      bottomNavigationBar: Theme(
+        child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onBottomNavigationBarTap,
+            fixedColor: AppColors.colorThemeAccent,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  backgroundColor: AppColors.colorThemePrimary[700],
+                  title: Text(
+                    "Home",
+                  )),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.playlist_play),
+                  backgroundColor: AppColors.colorThemePrimary[700],
+                  title: Text("Trailers")),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.list),
+                  backgroundColor: AppColors.colorThemePrimary[700],
+                  title: Text("Progress")),
+            ]),
+        data: Theme.of(context).copyWith(
+            // sets the background color of the `BottomNavigationBar`
+            canvasColor: AppColors.colorThemePrimary[700],
+            // sets the active color of the `BottomNavigationBar` if `Brightness` is light
+            primaryColor: Colors.red,
+            textTheme: Theme.of(context)
+                .textTheme
+                .copyWith(caption: new TextStyle(color: Colors.white70))),
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
