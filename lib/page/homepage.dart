@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/page/rowlistmovies.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
 
@@ -17,9 +18,21 @@ class _HomePageState extends State<HomePage> {
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            RowMovies(title: "Popular", iconData: Icons.featured_play_list ),
-            RowMovies(title: "Now Playing", iconData: Icons.movie),
-            RowMovies(title: "On TV", iconData: Icons.live_tv),
+            RowMovies(
+              title: "Popular",
+              iconData: Icons.featured_play_list,
+              listType: ApiMovieListType.Popularity,
+            ),
+            RowMovies(
+              title: "Now Playing",
+              iconData: Icons.movie,
+              listType: ApiMovieListType.Playing,
+            ),
+            RowMovies(
+              title: "On TV",
+              iconData: Icons.live_tv,
+              listType: ApiMovieListType.Ontv,
+            ),
           ],
         ),
       ),
@@ -36,8 +49,10 @@ class RowMovies extends StatelessWidget {
   final String title;
   final IconData iconData;
   final Color colorText = Colors.white70;
+  final ApiMovieListType listType;
 
-  const RowMovies({Key key, this.title, this.iconData}) : super(key: key);
+  const RowMovies({Key key, this.title, this.iconData, this.listType})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +86,10 @@ class RowMovies extends StatelessWidget {
                   ),
                 ],
               ),
-              Expanded(child: RowListMovies()),
+              Expanded(
+                  child: RowListMovies(
+                listType: listType,
+              )),
             ],
           ),
         ),

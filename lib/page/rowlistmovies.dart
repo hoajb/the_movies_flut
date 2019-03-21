@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:the_movies_flut/api/API.dart';
-import 'package:the_movies_flut/api/model/MovieData.dart';
+import 'package:the_movies_flut/api/filter/APIFilter.dart';
+import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
+import 'package:the_movies_flut/api/repository.dart';
 import 'package:the_movies_flut/widget/color_loader_4.dart';
 
 class RowListMovies extends StatelessWidget {
+  final ApiMovieListType listType;
+
+  const RowListMovies({Key key, this.listType}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<MovieData>>(
-      future: API.getTheMovieList(1),
+    return FutureBuilder<List<SimpleMovieItem>>(
+      future: Repository.getMovieListByType(listType, 1),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -17,7 +22,10 @@ class RowListMovies extends StatelessWidget {
             return ColorLoader4();
           case ConnectionState.done:
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-            return MoviesList(listData: snapshot.data);
+            return MoviesList(
+              listData: snapshot.data,
+              listType: listType,
+            );
         }
         return null; // unreachable
       },
@@ -26,9 +34,10 @@ class RowListMovies extends StatelessWidget {
 }
 
 class MoviesList extends StatefulWidget {
-  final List<MovieData> listData;
+  final ApiMovieListType listType;
+  final List<SimpleMovieItem> listData;
 
-  MoviesList({Key key, this.listData}) : super(key: key);
+  MoviesList({Key key, this.listData, this.listType}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +46,7 @@ class MoviesList extends StatefulWidget {
 }
 
 class _MoviesListState extends State<MoviesList> {
-  List<MovieData> _listData;
+  List<SimpleMovieItem> _listData;
   var _page;
 
   @override
@@ -50,7 +59,7 @@ class _MoviesListState extends State<MoviesList> {
   @override
   Widget build(BuildContext context) {
     _fetchData(int page) async {
-      var postList = await API.getTheMovieList(page);
+      var postList = await Repository.getMovieListByType(widget.listType, page);
       if (postList == null) {
 //      _error = "Error API";
       } else {
@@ -80,7 +89,7 @@ class _MoviesListState extends State<MoviesList> {
               children: <Widget>[
                 Expanded(
                   child: Image.network(
-                    API.UrlBaseImage + _listData[index].poster_path,
+                    _listData[index].image,
                   ),
                 ),
                 Text(

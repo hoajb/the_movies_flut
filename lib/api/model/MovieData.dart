@@ -1,6 +1,6 @@
 class MovieData {
   String vote_count;
-  String id;
+  int id;
   bool video;
   String vote_average;
   String title;
@@ -8,8 +8,7 @@ class MovieData {
   String poster_path;
   String original_language;
   String original_title;
-
-//  String genre_ids;
+  List<int> genre_ids;
   String backdrop_path;
   bool adult;
   String overview;
@@ -25,7 +24,7 @@ class MovieData {
     this.poster_path,
     this.original_language,
     this.original_title,
-//    this.genre_ids,
+    this.genre_ids,
     this.backdrop_path,
     this.adult,
     this.overview,
@@ -36,7 +35,7 @@ class MovieData {
 //    print(json["vote_average"]?.runtimeType);
     return new MovieData(
       vote_count: json['vote_count'].toString(),
-      id: json['id'].toString(),
+      id: json['id'] as num,
       video: json['video'],
       vote_average: json['vote_average'].toString(),
       title: json['title'].toString(),
@@ -44,7 +43,7 @@ class MovieData {
       poster_path: json['poster_path'].toString(),
       original_language: json['original_language'].toString(),
       original_title: json['original_title'].toString(),
-//      genre_ids: json['genre_ids'],
+      genre_ids: json['genre_ids'].cast<int>(),
       backdrop_path: json['backdrop_path'].toString(),
       adult: json['adult'],
       overview: json['overview'].toString(),
@@ -62,7 +61,7 @@ class MovieData {
         'poster_path': poster_path,
         'original_language': original_language,
         'original_title': original_title,
-//        'genre_ids': genre_ids,
+        'genre_ids': genre_ids,
         'backdrop_path': backdrop_path,
         'adult': adult,
         'overview': overview,

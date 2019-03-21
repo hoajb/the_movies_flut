@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:the_movies_flut/api/API.dart';
+import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/api/model/MovieData.dart';
 import 'package:the_movies_flut/widget/color_loader_4.dart';
 
@@ -49,7 +50,7 @@ class _MoviePageState extends State<MoviePage> {
   }
 
   Future<List<MovieData>> _fetchDataFuture() async {
-    return API.getTheMovieList(1);
+    return API.getMovieListByType(ApiMovieListType.Playing, 1);
   }
 
   @override
@@ -147,7 +148,7 @@ class MovieTileState extends State<MovieTile> {
   }
 
   _fetchData(int page) async {
-    var postList = await API.getTheMovieList(page);
+    var postList = await API.getMovieListByType(ApiMovieListType.Playing, page);
     if (postList == null) {
 //      _error = "Error API";
     } else {
