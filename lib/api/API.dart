@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/api/model/MovieData.dart';
 import 'package:the_movies_flut/api/model/TVShow.dart';
+import 'package:the_movies_flut/util/alog.dart';
 
 class API {
   static final HttpClient _httpClient = HttpClient();
@@ -90,7 +91,8 @@ class API {
 
   static Future<Map<String, dynamic>> _getJson(Uri uri) async {
     try {
-      print(uri);
+//      print(uri);
+      Alog.debug(uri);
       final httpRequest = await _httpClient.getUrl(uri);
       final httpResponse = await httpRequest.close();
       if (httpResponse.statusCode != HttpStatus.OK) {

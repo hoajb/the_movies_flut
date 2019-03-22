@@ -10,14 +10,22 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin<HomePage> {
+  int _count = 0;
+
   @override
   Widget build(BuildContext context) {
+    _count += 10;
     return Container(
       color: AppColors.colorThemePrimary,
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
+            Text(
+              _count.toString(),
+              style: TextStyle(fontSize: 20.0, color: Colors.white),
+            ),
             RowMovies(
               title: "Popular",
               iconData: Icons.featured_play_list,
@@ -43,6 +51,9 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class RowMovies extends StatelessWidget {
@@ -88,6 +99,7 @@ class RowMovies extends StatelessWidget {
               ),
               Expanded(
                   child: RowListMovies(
+                key: PageStorageKey<String>(title + "key"),
                 listType: listType,
               )),
             ],

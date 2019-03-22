@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:the_movies_flut/page/homepage.dart';
+import 'package:the_movies_flut/page/progresspage.dart';
+import 'package:the_movies_flut/page/trailerspage.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
-
-import 'homepage.dart';
-import 'progresspage.dart';
-import 'trailerspage.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -13,9 +12,17 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   int _selectedIndex = 0;
   PageController _pageController;
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = new PageController();
+    _tabController = new TabController(length: 3, vsync: this);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +30,23 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         title: Text("The Movies"),
       ),
-      body: PageView(
-        children: [
-          HomePage(),
-          TrailersPage(),
-          ProgressPage(),
+//      body: PageView(
+//        children: [
+//          HomePage(key: ValueKey("HomePage"),),
+//          TrailersPage(),
+//          ProgressPage(),
+//        ],
+//        controller: _pageController,
+//        onPageChanged: _onPageChanged,
+//      ),
+
+      body: TabBarView(
+        children: <Widget>[
+          HomePage(key: PageStorageKey<String>("HomePage"), ),
+          TrailersPage(key: PageStorageKey<String>("TrailersPage"),),
+          ProgressPage(key: PageStorageKey<String>("ProgressPage"),),
         ],
-        controller: _pageController,
-        onPageChanged: _onPageChanged,
+        controller: _tabController,
       ),
       bottomNavigationBar: Theme(
         child: BottomNavigationBar(
@@ -103,7 +119,9 @@ class _MainPageState extends State<MainPage> {
   void _onBottomNavigationBarTap(int page) {
 //    _pageController.animateToPage(page,
 //        duration: const Duration(milliseconds: 300), curve: Curves.elasticIn);
-    _pageController.jumpToPage(page);
+
+//    _pageController.jumpToPage(page);
+    _tabController.index = page;
   }
 
   void _onPageChanged(int index) {
@@ -113,14 +131,9 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _pageController = new PageController();
-  }
-
-  @override
   void dispose() {
     _pageController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 }
