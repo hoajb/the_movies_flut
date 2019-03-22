@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
+import 'package:the_movies_flut/page/popularpeople.dart';
 import 'package:the_movies_flut/page/rowlistmovies.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
 
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage>
               iconData: Icons.live_tv,
               listType: ApiMovieListType.Ontv,
             ),
+            RowPeople(),
           ],
         ),
       ),
@@ -102,6 +104,54 @@ class RowMovies extends StatelessWidget {
                 key: PageStorageKey<String>(title + "key"),
                 listType: listType,
               )),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RowPeople extends StatelessWidget {
+  final Color colorText = Colors.white70;
+
+  const RowPeople({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      child: Card(
+        child: Container(
+          padding: EdgeInsets.all(10.0),
+          decoration: BoxDecoration(
+              color: AppColors.colorThemePrimary[800],
+              border: null,
+              borderRadius: BorderRadius.all(Radius.circular(5.0))),
+          child: Column(
+            children: <Widget>[
+              Row(
+                children: <Widget>[
+                  Icon(
+                    Icons.people,
+                    color: colorText,
+                  ),
+                  Expanded(
+                      child: Container(
+                          margin: EdgeInsets.all(10.0),
+                          child: Text(
+                            "Popular People",
+                            style: TextStyle(color: colorText),
+                          ))),
+                  Icon(
+                    Icons.more_vert,
+                    color: colorText,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: PopularPeopleRowList(),
+              ),
             ],
           ),
         ),

@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/api/model/MovieData.dart';
+import 'package:the_movies_flut/api/model/Person.dart';
 import 'package:the_movies_flut/api/model/TVShow.dart';
 import 'package:the_movies_flut/util/alog.dart';
 
@@ -16,6 +17,25 @@ class API {
 
   static String get UrlBaseImage => "https://image.tmdb.org/t/p/w500";
 
+  static Future<Map<String, dynamic>> _getJson(Uri uri) async {
+    try {
+//      print(uri);
+      Alog.debug(uri);
+      final httpRequest = await _httpClient.getUrl(uri);
+      final httpResponse = await httpRequest.close();
+      if (httpResponse.statusCode != HttpStatus.OK) {
+        return null;
+      }
+
+      final responseBody = await httpResponse.transform(utf8.decoder).join();
+      return json.decode(responseBody);
+    } on Exception catch (e) {
+      print('$e');
+      return null;
+    }
+  }
+
+  /// API from here
   static Future<List<MovieData>> getMovieListByType(
       ApiMovieListType type, int page) async {
     Uri uri;
@@ -52,12 +72,14 @@ class API {
     if (jsonResponse == null) {
       return null;
     }
-//    if (jsonResponse['errors'] != null) {
-//      return null;
-//    }
-//    if (jsonResponse['items'] == null) {
-//      return List();
-//    }
+    if (jsonResponse['status_code'] != null ||
+        jsonResponse['status_message'] != null) {
+      //TODO ERROR
+      return null;
+    }
+    if (jsonResponse['results'] == null) {
+      return List();
+    }
 
     return MovieList.fromJson(jsonResponse).results;
   }
@@ -76,12 +98,14 @@ class API {
       if (jsonResponse == null) {
         return null;
       }
-//    if (jsonResponse['errors'] != null) {
-//      return null;
-//    }
-//    if (jsonResponse['items'] == null) {
-//      return List();
-//    }
+      if (jsonResponse['status_code'] != null ||
+          jsonResponse['status_message'] != null) {
+        //TODO ERROR
+        return null;
+      }
+      if (jsonResponse['results'] == null) {
+        return List();
+      }
 
       return TVShowList.fromJson(jsonResponse).results;
     } else {
@@ -89,21 +113,25 @@ class API {
     }
   }
 
-  static Future<Map<String, dynamic>> _getJson(Uri uri) async {
-    try {
-//      print(uri);
-      Alog.debug(uri);
-      final httpRequest = await _httpClient.getUrl(uri);
-      final httpResponse = await httpRequest.close();
-      if (httpResponse.statusCode != HttpStatus.OK) {
-        return null;
-      }
-
-      final responseBody = await httpResponse.transform(utf8.decoder).join();
-      return json.decode(responseBody);
-    } on Exception catch (e) {
-      print('$e');
+  static Future<List<Person>> getPopularPerson(int page) async {
+    Uri uri;
+    uri = Uri.https(_url, _url_prefix + '/person/popular', {
+      'page': page.toString(),
+      'api_key': _url_api_key,
+    });
+    final jsonResponse = await _getJson(uri);
+    if (jsonResponse == null) {
       return null;
     }
+    if (jsonResponse['status_code'] != null ||
+        jsonResponse['status_message'] != null) {
+      //TODO ERROR
+      return null;
+    }
+    if (jsonResponse['results'] == null) {
+      return List();
+    }
+
+    return PersonList.fromJson(jsonResponse).results;
   }
 }

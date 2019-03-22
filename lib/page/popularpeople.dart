@@ -1,30 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:the_movies_flut/api/filter/APIFilter.dart';
-import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
+import 'package:the_movies_flut/api/model/ui/SimplePeople.dart';
 import 'package:the_movies_flut/api/repository.dart';
 import 'package:the_movies_flut/util/alog.dart';
 import 'package:the_movies_flut/widget/color_loader_4.dart';
 
-class RowListMovies extends StatefulWidget {
-  final ApiMovieListType listType;
-
-  const RowListMovies({Key key, this.listType}) : super(key: key);
+class PopularPeopleRowList extends StatefulWidget {
+  const PopularPeopleRowList({Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _RowListMoviesState(listType: listType);
+    return _PopularPeopleRowListState();
   }
 }
 
-class _RowListMoviesState extends State<RowListMovies> {
-  final ApiMovieListType listType;
-
-  _RowListMoviesState({Key key, this.listType});
+class _PopularPeopleRowListState extends State<PopularPeopleRowList> {
+  _PopularPeopleRowListState({Key key});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<SimpleMovieItem>>(
-      future: Repository.getMovieListByType(listType, 1),
+    return FutureBuilder<List<SimplePeople>>(
+      future: Repository.getPopularPeople(1),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -34,10 +29,7 @@ class _RowListMoviesState extends State<RowListMovies> {
             return ColorLoader4();
           case ConnectionState.done:
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-            return MoviesList(
-              listData: snapshot.data,
-              listType: listType,
-            );
+            return PeopleList(listData: snapshot.data);
         }
         return null; // unreachable
       },
@@ -45,34 +37,37 @@ class _RowListMoviesState extends State<RowListMovies> {
   }
 }
 
-class MoviesList extends StatefulWidget {
-  final ApiMovieListType listType;
-  final List<SimpleMovieItem> listData;
+class PeopleList extends StatefulWidget {
+  final List<SimplePeople> listData;
 
-  const MoviesList({Key key, this.listData, this.listType}) : super(key: key);
+  const PeopleList({Key key, this.listData}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _MoviesListState();
+    return _PeopleListState();
   }
 }
 
-class _MoviesListState extends State<MoviesList> {
-  List<SimpleMovieItem> _listData;
+class _PeopleListState extends State<PeopleList> {
+  List<SimplePeople> _listData;
   var _page;
+  bool isLoading;
 
   @override
   void initState() {
     _page = 1;
     _listData = widget.listData != null ? widget.listData : List();
+    isLoading = false;
     super.initState();
   }
 
   _fetchData(int page) async {
-    var postList = await Repository.getMovieListByType(widget.listType, page);
+    isLoading = true;
+    var postList = await Repository.getPopularPeople(page);
     if (postList == null) {
 //      _error = "Error API";
     } else {
+      isLoading = false;
       if (mounted) {
         setState(() {
           _listData.addAll(postList);
@@ -88,31 +83,32 @@ class _MoviesListState extends State<MoviesList> {
         itemCount: _listData.length, //> 0 ? _listData.length + 1 : 0,
         physics: ClampingScrollPhysics(),
         itemBuilder: (BuildContext context, int index) {
-          if (_listData.length > 0 && index == _listData.length - 3) {
+          if (!isLoading &&
+              _listData.length > 0 &&
+              index == _listData.length - 3) {
             _fetchData(++_page);
             Alog.debug("fetch page = $_page");
           }
 
           if (_listData.length > 0 && index == _listData.length - 1) {
             return Container(
-                width: 65, child: Center(child: CircularProgressIndicator()));
+                width: 45, child: Center(child: CircularProgressIndicator()));
           }
           return Container(
-            width: 130,
-            padding: EdgeInsets.all(5.0),
+            padding: EdgeInsets.all(8.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Expanded(
-                  child: Image.network(
-                    _listData[index].image,
-                  ),
+                CircleAvatar(
+                  minRadius: 40.0,
+                  backgroundImage: NetworkImage(_listData[index].image),
+                  backgroundColor: Colors.transparent,
                 ),
                 Text(
-                  _listData[index].title + "\n",
-                  textAlign: TextAlign.left,
+                  _listData[index].name.replaceAll(" ", '\n'),
+                  textAlign: TextAlign.center,
                   softWrap: true,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
