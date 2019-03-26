@@ -14,14 +14,18 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   int _selectedIndex = 0;
-  PageController _pageController;
+//  PageController _pageController;
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _pageController = new PageController();
+//    _pageController = new PageController();
     _tabController = new TabController(length: 3, vsync: this);
+
+//    _tabController.addListener(() {
+//      _onPageChanged(_tabController.index);
+//    });
   }
 
   @override
@@ -42,9 +46,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
       body: TabBarView(
         children: <Widget>[
-          HomePage(key: PageStorageKey<String>("HomePage"), ),
-          TrailersPage(key: PageStorageKey<String>("TrailersPage"),),
-          ProgressPage(key: PageStorageKey<String>("ProgressPage"),),
+          HomePage(
+//            key: PageStorageKey<String>("HomePage"),
+          ),
+          TrailersPage(
+//            key: PageStorageKey<String>("TrailersPage"),
+          ),
+          ProgressPage(
+//            key: PageStorageKey<String>("ProgressPage"),
+          ),
         ],
         controller: _tabController,
       ),
@@ -122,6 +132,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
 //    _pageController.jumpToPage(page);
     _tabController.index = page;
+
+    setState(() {
+      _selectedIndex = page;
+    });
   }
 
   void _onPageChanged(int index) {
@@ -132,7 +146,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    _pageController.dispose();
+//    _pageController.dispose();
     _tabController.dispose();
     super.dispose();
   }
