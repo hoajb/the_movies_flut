@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
 import 'package:the_movies_flut/page/movie_row_list/movie_row_list_export.dart';
+import 'package:the_movies_flut/resource/app_resources.dart';
 import 'package:the_movies_flut/util/alog.dart';
 
 class MovieRowListWidget extends StatefulWidget {
@@ -117,6 +118,7 @@ class MovieCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Alog.debug("MovieCardWidget - data.image: ${data.image}");
     return Container(
       width: 130,
       padding: EdgeInsets.all(5.0),
@@ -126,22 +128,36 @@ class MovieCardWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
-            child: data.image != null
-                ? Image.network(
-                    data.image,
-                  )
-                : Center(child: Text("No Image")),
+            child: data.image != null && data.image != ""
+                ? Image.network(data.image, fit: BoxFit.cover)
+                : Container(
+                    color: AppColors.colorThemePrimary[700],
+                    child: Center(
+                        child: Text(
+                      "No Image",
+                      style: TextStyle(
+                          fontSize: 10.0,
+                          color: Colors.white70,
+                          fontStyle: FontStyle.italic),
+                    )),
+                  ),
           ),
-          Text(
-            data.title + "\n",
-            textAlign: TextAlign.center,
-            softWrap: true,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                fontSize: 13.0,
-                color: Colors.white,
-                fontWeight: FontWeight.normal),
+          Container(
+            width: 130,
+            child: Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                data.title + "\n",
+                textAlign: TextAlign.center,
+                softWrap: true,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 13.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal),
+              ),
+            ),
           )
         ],
       ),
