@@ -17,6 +17,7 @@ class MoviesBloc extends Bloc<MoviesEvent, ListDataState> {
 
   @override
   Stream<ListDataState> mapEventToState(MoviesEvent event) async* {
+    Alog.debug("mapEventToState : $event");
     if (event is Fetch && !_hasReachedMax(currentState)) {
       try {
         //init load
@@ -24,6 +25,7 @@ class MoviesBloc extends Bloc<MoviesEvent, ListDataState> {
           final posts = await Repository.getMovieListByType(listType, 1);
 
           yield ListLoaded(lists: posts, currentPage: 1, hasReachedMax: false);
+          return;
         }
 
         //load more
@@ -41,11 +43,13 @@ class MoviesBloc extends Bloc<MoviesEvent, ListDataState> {
                 lists: currentListState.lists,
                 hasReachedMax: true,
                 currentPage: 0);
+            return;
           } else {
             yield ListLoaded(
                 lists: _appendList(currentListState.lists, posts),
                 hasReachedMax: false,
                 currentPage: nextPage);
+            return;
           }
         }
       } catch (e) {

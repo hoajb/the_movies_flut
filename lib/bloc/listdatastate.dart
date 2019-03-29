@@ -28,7 +28,7 @@ class ListLoaded extends ListDataState {
     this.lists,
     this.currentPage,
     this.hasReachedMax,
-  }) : super([lists, hasReachedMax]);
+  }) : super([lists, currentPage, hasReachedMax]);
 
   ListLoaded copyWith({
     List<SimpleMovieItem> lists,
@@ -41,7 +41,7 @@ class ListLoaded extends ListDataState {
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
     );
   }
-  
+
   ListLoaded appendList({
     List<SimpleMovieItem> lists,
     int currentPage,

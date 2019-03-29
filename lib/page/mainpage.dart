@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:the_movies_flut/page/homepage.dart';
+import 'package:the_movies_flut/page/movielist/movie_list_page.dart';
 import 'package:the_movies_flut/page/progresspage.dart';
 import 'package:the_movies_flut/page/trailerspage.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
@@ -14,6 +14,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   int _selectedIndex = 0;
+
 //  PageController _pageController;
   TabController _tabController;
 
@@ -46,18 +47,19 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
       body: TabBarView(
         children: <Widget>[
-          HomePage(
+          MovieListPage2(
 //            key: PageStorageKey<String>("HomePage"),
-          ),
+              ),
           TrailersPage(
 //            key: PageStorageKey<String>("TrailersPage"),
-          ),
+              ),
           ProgressPage(
 //            key: PageStorageKey<String>("ProgressPage"),
-          ),
+              ),
         ],
         controller: _tabController,
       ),
+
       bottomNavigationBar: Theme(
         child: BottomNavigationBar(
             currentIndex: _selectedIndex,

@@ -1,53 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:the_movies_flut/api/filter/APIFilter.dart';
-import 'package:the_movies_flut/bloc/listdatastate.dart';
-import 'package:the_movies_flut/bloc/movies_bloc.dart';
-import 'package:the_movies_flut/bloc/movies_event.dart';
+import 'package:the_movies_flut/page/movielist/bloc_export.dart';
 import 'package:the_movies_flut/util/alog.dart';
 import 'package:the_movies_flut/widget/movie_widget.dart';
 
-class ProgressPage extends StatefulWidget {
-  ProgressPage({Key key}) : super(key: key);
-
+class MovieListPage2 extends StatefulWidget {
   @override
-  _ProgressPageState createState() => _ProgressPageState();
+  _MovieListPage2State createState() => _MovieListPage2State();
 }
 
-class _ProgressPageState extends State<ProgressPage> {
-  MoviesBloc _moviesBloc;
+class _MovieListPage2State extends State<MovieListPage2> {
+  final MovieListBloc _bloc = MovieListBloc();
 
   @override
   void initState() {
-    if (_moviesBloc != null) {
-      _moviesBloc.dispose();
-    }
-    _moviesBloc = MoviesBloc(ApiMovieListType.Popularity);
-    _moviesBloc.dispatch(Fetch());
+    _bloc.dispatchEvent(LoadMovieListEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      color: Colors.yellow,
-      child: BlocBuilder<MoviesEvent, ListDataState>(
-        bloc: _moviesBloc,
-        builder: (BuildContext context, ListDataState state) {
-          if (state is ListUninitialized) {
+    return Center(
+      child: StreamBuilder(
+        initialData: UnMovieListState(),
+        stream: _bloc.stream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          var state = snapshot.data;
+          if (state is UnMovieListState) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          if (state is ListError) {
+          if (state is ErrorMovieListState) {
             return Center(
               child: Text(state.toString()),
             );
           }
 
-          if (state is ListLoaded) {
+          if (state is InMovieListState) {
             if (state.lists.isEmpty) {
               return Center(
                 child: Text('no posts'),
@@ -66,7 +56,7 @@ class _ProgressPageState extends State<ProgressPage> {
                       index == state.lists.length - 2) {
                     Alog.debug("ListView -- loadmore: " +
                         state.lists.length.toString());
-                    _moviesBloc.dispatch(Fetch());
+                    _bloc.dispatchEvent(LoadMoreMovieListEvent());
                   }
                   return index >= state.lists.length
                       ? Center(
@@ -88,7 +78,7 @@ class _ProgressPageState extends State<ProgressPage> {
 
   @override
   void dispose() {
-    _moviesBloc.dispose();
+    _bloc.dispose();
     super.dispose();
   }
 }

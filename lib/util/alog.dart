@@ -4,7 +4,7 @@ export 'alog.dart';
 
 class Alog {
   static final String defaultClassName = 'TheMovies';
-  static final log = Logger(defaultClassName);
+//  static final log = Logger(defaultClassName);
 
   //init first
   static void init() {
@@ -17,6 +17,8 @@ class Alog {
   }
 
   static void debug(Object object) {
+    Logger log = Logger(defaultClassName);
     log.info(object);
+//    print(object);
   }
 }
