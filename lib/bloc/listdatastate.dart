@@ -10,6 +10,15 @@ class ListUninitialized extends ListDataState {
   String toString() => 'ListUninitialized';
 }
 
+class ShowDetailState extends ListDataState {
+  final String nameMovie;
+
+  ShowDetailState(this.nameMovie);
+
+  @override
+  String toString() => 'ShowDetail';
+}
+
 class ListError extends ListDataState {
   final String error;
 

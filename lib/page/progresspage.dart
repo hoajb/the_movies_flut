@@ -5,7 +5,7 @@ import 'package:the_movies_flut/bloc/listdatastate.dart';
 import 'package:the_movies_flut/bloc/movies_bloc.dart';
 import 'package:the_movies_flut/bloc/movies_event.dart';
 import 'package:the_movies_flut/util/alog.dart';
-import 'package:the_movies_flut/widget/movie_widget.dart';
+import 'package:the_movies_flut/widget/movie_widget_provider.dart';
 
 class ProgressPage extends StatefulWidget {
   ProgressPage({Key key}) : super(key: key);
@@ -23,18 +23,23 @@ class _ProgressPageState extends State<ProgressPage> {
       _moviesBloc.dispose();
     }
     _moviesBloc = MoviesBloc(ApiMovieListType.Popularity);
-    _moviesBloc.dispatch(Fetch());
+    _moviesBloc.dispatch(FetchEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      color: Colors.yellow,
+    return BlocProvider(
+      bloc: _moviesBloc,
       child: BlocBuilder<MoviesEvent, ListDataState>(
         bloc: _moviesBloc,
         builder: (BuildContext context, ListDataState state) {
+          if (state is ShowDetailState) {
+            return Center(
+              child: Text(state.nameMovie),
+            );
+          }
+
           if (state is ListUninitialized) {
             return Center(
               child: CircularProgressIndicator(),
@@ -66,13 +71,13 @@ class _ProgressPageState extends State<ProgressPage> {
                       index == state.lists.length - 2) {
                     Alog.debug("ListView -- loadmore: " +
                         state.lists.length.toString());
-                    _moviesBloc.dispatch(Fetch());
+                    _moviesBloc.dispatch(FetchEvent());
                   }
                   return index >= state.lists.length
                       ? Center(
                           child: CircularProgressIndicator(),
                         )
-                      : MovieWidget(data: state.lists[index]);
+                      : MovieWidgetProvider(data: state.lists[index]);
                 },
                 scrollDirection: Axis.horizontal,
                 itemCount: state.hasReachedMax

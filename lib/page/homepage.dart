@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
+import 'package:the_movies_flut/page/movie_row_list/movie_row_list_widget.dart';
 import 'package:the_movies_flut/page/popularpeople.dart';
-import 'package:the_movies_flut/page/rowlistmovies.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
 
 class HomePage extends StatefulWidget {
@@ -100,7 +100,7 @@ class RowMovies extends StatelessWidget {
                 ],
               ),
               Expanded(
-                  child: RowListMovies(
+                  child: MovieRowListWidget(
                 key: PageStorageKey<String>(title + "key"),
                 listType: listType,
               )),

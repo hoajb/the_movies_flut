@@ -1,0 +1,150 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:the_movies_flut/api/filter/APIFilter.dart';
+import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
+import 'package:the_movies_flut/page/movie_row_list/movie_row_list_export.dart';
+import 'package:the_movies_flut/util/alog.dart';
+
+class MovieRowListWidget extends StatefulWidget {
+  final ApiMovieListType listType;
+
+  MovieRowListWidget({Key key, this.listType}) : super(key: key);
+
+  @override
+  _MovieRowListWidgetState createState() => _MovieRowListWidgetState();
+}
+
+class _MovieRowListWidgetState extends State<MovieRowListWidget> {
+  MoviesBloc _moviesBloc;
+
+  @override
+  void initState() {
+    if (_moviesBloc != null) {
+      _moviesBloc.dispose();
+    }
+    _moviesBloc = MoviesBloc(widget.listType);
+    _moviesBloc.dispatch(FetchInitEvent());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      bloc: _moviesBloc,
+      child: BlocBuilder<MovieRowListEvent, ListState>(
+        bloc: _moviesBloc,
+        builder: (BuildContext context, ListState state) {
+          if (state is UninitializedListState || state is FetchingListState) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (state is ErrorListState) {
+            return Center(
+              child: Column(
+                children: <Widget>[
+                  Text(state.toString()),
+                  FlatButton(
+                    onPressed: () {
+                      _moviesBloc.dispatch(FetchInitEvent());
+                    },
+                    child: Text("Retry"),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          if (state is FetchedListState) {
+            if (state.lists.isEmpty) {
+              return Center(
+                child: Text('no posts'),
+              );
+            }
+            return Container(
+              height: 300,
+              child: ListView.builder(
+                physics: ClampingScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  Alog.debug("ListView index :" +
+                      index.toString() +
+                      "/" +
+                      state.lists.length.toString());
+                  if (state.lists.length > 0 &&
+                      index == state.lists.length - 2) {
+                    Alog.debug("ListView -- loadmore: " +
+                        state.lists.length.toString());
+                    _moviesBloc.dispatch(FetchMoreEvent());
+                  }
+                  return index >= state.lists.length
+                      ? SizedBox(
+                          width: 70,
+                          child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                  child: Center(
+                                      child: CircularProgressIndicator())),
+                              Text(
+                                "\n\n",
+                              )
+                            ],
+                          ),
+                        )
+                      : MovieCardWidget(data: state.lists[index]);
+                },
+                scrollDirection: Axis.horizontal,
+                itemCount: state.hasLoadMore
+                    ? state.lists.length + 1
+                    : state.lists.length,
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _moviesBloc.dispose();
+    super.dispose();
+  }
+}
+
+class MovieCardWidget extends StatelessWidget {
+  final SimpleMovieItem data;
+
+  const MovieCardWidget({Key key, this.data}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 130,
+      padding: EdgeInsets.all(5.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: Image.network(
+              data.image,
+            ),
+          ),
+          Text(
+            data.title + "\n",
+            textAlign: TextAlign.center,
+            softWrap: true,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+                fontSize: 13.0,
+                color: Colors.white,
+                fontWeight: FontWeight.normal),
+          )
+        ],
+      ),
+    );
+  }
+}

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:the_movies_flut/page/movielist/movie_list_page.dart';
+import 'package:the_movies_flut/page/homepage.dart';
 import 'package:the_movies_flut/page/progresspage.dart';
 import 'package:the_movies_flut/page/trailerspage.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
@@ -47,7 +47,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
       body: TabBarView(
         children: <Widget>[
-          MovieListPage2(
+          HomePage(
 //            key: PageStorageKey<String>("HomePage"),
               ),
           TrailersPage(

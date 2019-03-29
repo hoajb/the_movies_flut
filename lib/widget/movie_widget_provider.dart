@@ -4,17 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
 import 'package:the_movies_flut/bloc/bloc.dart';
 
-class MovieWidget extends StatelessWidget {
+class MovieWidgetProvider extends StatelessWidget {
   final SimpleMovieItem data;
 
-  const MovieWidget({Key key, this.data}) : super(key: key);
+  const MovieWidgetProvider({Key key, this.data}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-//    MoviesBloc bloc = BlocProvider.of<MoviesBloc>(context);
+    MoviesBloc bloc = BlocProvider.of<MoviesBloc>(context);
 
     return GestureDetector(
-//      onTap: () => bloc.dispatch(ShowMovieDetailEvent(data.title)),
+      onTap: () => bloc.dispatch(ShowMovieDetailEvent(data.title)),
       child: Container(
         width: 130,
         padding: EdgeInsets.all(5.0),
