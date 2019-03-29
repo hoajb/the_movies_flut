@@ -34,6 +34,7 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
       child: BlocBuilder<MovieRowListEvent, ListState>(
         bloc: _moviesBloc,
         builder: (BuildContext context, ListState state) {
+          Alog.debug("BlocProvider : $state");
           if (state is UninitializedListState || state is FetchingListState) {
             return Center(
               child: CircularProgressIndicator(),
@@ -57,9 +58,10 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
           }
 
           if (state is FetchedListState) {
+            Alog.debug("FetchedListState : $state");
             if (state.lists.isEmpty) {
               return Center(
-                child: Text('no posts'),
+                child: Text('No Data'),
               );
             }
             return Container(
@@ -67,16 +69,12 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
               child: ListView.builder(
                 physics: ClampingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  Alog.debug("ListView index :" +
-                      index.toString() +
-                      "/" +
-                      state.lists.length.toString());
                   if (state.lists.length > 0 &&
                       index == state.lists.length - 2) {
-                    Alog.debug("ListView -- loadmore: " +
-                        state.lists.length.toString());
                     _moviesBloc.dispatch(FetchMoreEvent());
                   }
+
+                  Alog.debug("FetchedListState - itemBuilder: $state");
                   return index >= state.lists.length
                       ? SizedBox(
                           width: 70,
@@ -86,7 +84,7 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
                                   child: Center(
                                       child: CircularProgressIndicator())),
                               Text(
-                                "\n\n",
+                                "\n",
                               )
                             ],
                           ),
@@ -128,9 +126,11 @@ class MovieCardWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Expanded(
-            child: Image.network(
-              data.image,
-            ),
+            child: data.image != null
+                ? Image.network(
+                    data.image,
+                  )
+                : Center(child: Text("No Image")),
           ),
           Text(
             data.title + "\n",

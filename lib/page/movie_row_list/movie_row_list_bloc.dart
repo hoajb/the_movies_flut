@@ -19,22 +19,35 @@ class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
 
     try {
       if (event is FetchInitEvent) {
-        final posts = await Repository.getMovieListByType(listType, 1);
+        var initPage = 48;
+        final posts = await Repository.getMovieListByType2(listType, initPage);
 
-        yield FetchedListState(lists: posts, currentPage: 1, hasLoadMore: true);
-        return;
+        if (posts.error.isError()) {
+          yield ErrorListState(posts.error.error);
+          return;
+        } else {
+          yield FetchedListState(
+              lists: posts.data,
+              currentPage: initPage,
+              hasLoadMore: initPage < posts.totalPages);
+          return;
+        }
       } else if (event is FetchMoreEvent) {
         if (currentState is FetchedListState) {
           var fetchedState = currentState as FetchedListState;
           if (fetchedState.hasLoadMore) {
-            var nextState = fetchedState.currentPage + 1;
+            Alog.debug("FetchMoreEvent : ${fetchedState.hasLoadMore}");
+            var nextPage = fetchedState.currentPage + 1;
             final posts =
-                await Repository.getMovieListByType(listType, nextState);
-            fetchedState.lists.addAll(posts);
+                await Repository.getMovieListByType2(listType, nextPage);
+            fetchedState.lists.addAll(posts.data);
+
             yield FetchedListState(
                 lists: fetchedState.lists,
-                currentPage: nextState,
-                hasLoadMore: true);
+                currentPage: nextPage,
+                hasLoadMore: nextPage < posts.totalPages);
+            Alog.debug(
+                "FetchMoreEvent : ${fetchedState.hasLoadMore} return!!!!!");
             return;
           }
 

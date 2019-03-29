@@ -13,13 +13,16 @@ class SimpleMovieItem {
     return SimpleMovieItem(
         id: data.id,
         title: data.title,
-        image: API.UrlBaseImage + data.poster_path);
+        image: data.poster_path != null
+            ? API.UrlBaseImage + data.poster_path
+            : "");
   }
 
   factory SimpleMovieItem.fromTVShow(TVShowData data) {
     return SimpleMovieItem(
         id: data.id,
         title: data.name,
-        image: API.UrlBaseImage + data.posterPath);
+        image:
+            data.posterPath != null ? API.UrlBaseImage + data.posterPath : "");
   }
 }

@@ -65,8 +65,16 @@ class TVShowData {
 
 class TVShowList {
   List<TVShowData> results;
+  int page;
+  int totalPages;
+  int totalResults;
 
-  TVShowList({this.results});
+  TVShowList({
+    this.results,
+    this.page,
+    this.totalPages,
+    this.totalResults,
+  });
 
   static TVShowList fromJson(Map<String, dynamic> json) {
     var resultsJson = json['results'];
@@ -75,9 +83,18 @@ class TVShowList {
     var listData = resultsList != null
         ? resultsList.map((child) => TVShowData.fromJson(child))?.toList()
         : List();
-    return TVShowList(results: listData);
+
+    return TVShowList(
+        results: listData,
+        page: json['page'],
+        totalPages: json['total_pages'],
+        totalResults: json['total_results']);
   }
 
-  Map<String, dynamic> toJson() => {'results': results};
+  Map<String, dynamic> toJson() => {
+        'results': results,
+        'page': page,
+        'total_pages': totalPages,
+        'total_results': totalResults,
+      };
 }
-
