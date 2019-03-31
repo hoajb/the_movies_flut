@@ -3,7 +3,6 @@ import 'package:rxdart/rxdart.dart';
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/api/repository.dart';
 import 'package:the_movies_flut/page/movie_row_list/movie_row_list_export.dart';
-import 'package:the_movies_flut/util/alog.dart';
 
 class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
   final ApiMovieListType listType;
@@ -15,11 +14,9 @@ class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
 
   @override
   Stream<ListState> mapEventToState(MovieRowListEvent event) async* {
-    Alog.debug("mapEventToState : $event");
-
     try {
       if (event is FetchInitEvent) {
-        var initPage = 48;
+        var initPage = 1;
         final posts = await Repository.getMovieListByType2(listType, initPage);
 
         if (posts.error.isError()) {
@@ -36,7 +33,6 @@ class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
         if (currentState is FetchedListState) {
           var fetchedState = currentState as FetchedListState;
           if (fetchedState.hasLoadMore) {
-            Alog.debug("FetchMoreEvent : ${fetchedState.hasLoadMore}");
             var nextPage = fetchedState.currentPage + 1;
             final posts =
                 await Repository.getMovieListByType2(listType, nextPage);
@@ -46,8 +42,6 @@ class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
                 lists: fetchedState.lists,
                 currentPage: nextPage,
                 hasLoadMore: nextPage < posts.totalPages);
-            Alog.debug(
-                "FetchMoreEvent : ${fetchedState.hasLoadMore} return!!!!!");
             return;
           }
 

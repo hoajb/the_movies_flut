@@ -13,20 +13,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin<HomePage> {
-  int _count = 0;
 
   @override
   Widget build(BuildContext context) {
-    _count += 10;
     return Container(
       color: AppColors.colorThemePrimary,
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Text(
-              _count.toString(),
-              style: TextStyle(fontSize: 20.0, color: Colors.white),
-            ),
             RowMovies(
               title: "Popular",
               iconData: Icons.featured_play_list,
@@ -71,41 +65,40 @@ class RowMovies extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 300,
-      child: Card(
-        child: Container(
-          padding: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-              color: AppColors.colorThemePrimary[800],
-              border: null,
-              borderRadius: BorderRadius.all(Radius.circular(5.0))),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Icon(
-                    iconData,
-                    color: colorText,
-                  ),
-                  Expanded(
-                      child: Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: Text(
-                            title,
-                            style: TextStyle(color: colorText),
-                          ))),
-                  Icon(
-                    Icons.more_vert,
-                    color: colorText,
-                  ),
-                ],
-              ),
-              Expanded(
-                  child: MovieRowListWidget(
-                key: PageStorageKey<String>(title + "key"),
-                listType: listType,
-              )),
-            ],
-          ),
+      child: Container(
+        margin: EdgeInsets.all(5.0),
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+            color: AppColors.colorThemePrimary[800],
+            border: null,
+            borderRadius: BorderRadius.all(Radius.circular(5.0))),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Icon(
+                  iconData,
+                  color: colorText,
+                ),
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.all(10.0),
+                        child: Text(
+                          title,
+                          style: TextStyle(color: colorText),
+                        ))),
+                Icon(
+                  Icons.more_vert,
+                  color: colorText,
+                ),
+              ],
+            ),
+            Expanded(
+                child: MovieRowListWidget(
+              key: PageStorageKey<String>(title + "key"),
+              listType: listType,
+            )),
+          ],
         ),
       ),
     );
@@ -121,39 +114,38 @@ class RowPeople extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      child: Card(
-        child: Container(
-          padding: EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-              color: AppColors.colorThemePrimary[800],
-              border: null,
-              borderRadius: BorderRadius.all(Radius.circular(5.0))),
-          child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.people,
-                    color: colorText,
-                  ),
-                  Expanded(
-                      child: Container(
-                          margin: EdgeInsets.all(10.0),
-                          child: Text(
-                            "Popular People",
-                            style: TextStyle(color: colorText),
-                          ))),
-                  Icon(
-                    Icons.more_vert,
-                    color: colorText,
-                  ),
-                ],
-              ),
-              Expanded(
-                child: PopularPeopleRowList(),
-              ),
-            ],
-          ),
+      child: Container(
+        margin: EdgeInsets.all(5.0),
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+            color: AppColors.colorThemePrimary[800],
+            border: null,
+            borderRadius: BorderRadius.all(Radius.circular(5.0))),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Icon(
+                  Icons.people,
+                  color: colorText,
+                ),
+                Expanded(
+                    child: Container(
+                        margin: EdgeInsets.all(10.0),
+                        child: Text(
+                          "Popular People",
+                          style: TextStyle(color: colorText),
+                        ))),
+                Icon(
+                  Icons.more_vert,
+                  color: colorText,
+                ),
+              ],
+            ),
+            Expanded(
+              child: PopularPeopleRowList(),
+            ),
+          ],
         ),
       ),
     );

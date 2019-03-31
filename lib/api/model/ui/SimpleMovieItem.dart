@@ -11,12 +11,11 @@ class SimpleMovieItem {
   SimpleMovieItem({this.id, this.title, this.image});
 
   factory SimpleMovieItem.fromMovie(MovieData data) {
-    Alog.debug("MovieData.posterPath[${data.title}] - [${data.poster_path}]");
     return SimpleMovieItem(
         id: data.id,
         title: data.title,
         image: (data.poster_path != null && data.poster_path.contains(".jpg"))
-            ? API.UrlBaseImage + data.poster_path
+            ? API.urlBaseImage + data.poster_path
             : "");
   }
 
@@ -25,6 +24,6 @@ class SimpleMovieItem {
         id: data.id,
         title: data.name,
         image:
-        (data.posterPath != null && data.posterPath.contains(".jpg")) ? API.UrlBaseImage + data.posterPath : "");
+        (data.posterPath != null && data.posterPath.contains(".jpg")) ? API.urlBaseImage + data.posterPath : "");
   }
 }

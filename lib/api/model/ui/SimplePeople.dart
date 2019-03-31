@@ -12,6 +12,6 @@ class SimplePeople {
     return SimplePeople(
         id: data.id,
         name: data.name,
-        image: API.UrlBaseImage + data.profilePath);
+        image: API.urlBaseImage + data.profilePath);
   }
 }

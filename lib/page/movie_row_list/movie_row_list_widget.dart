@@ -35,7 +35,6 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
       child: BlocBuilder<MovieRowListEvent, ListState>(
         bloc: _moviesBloc,
         builder: (BuildContext context, ListState state) {
-          Alog.debug("BlocProvider : $state");
           if (state is UninitializedListState || state is FetchingListState) {
             return Center(
               child: CircularProgressIndicator(),
@@ -59,7 +58,6 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
           }
 
           if (state is FetchedListState) {
-            Alog.debug("FetchedListState : $state");
             if (state.lists.isEmpty) {
               return Center(
                 child: Text('No Data'),
@@ -75,7 +73,6 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
                     _moviesBloc.dispatch(FetchMoreEvent());
                   }
 
-                  Alog.debug("FetchedListState - itemBuilder: $state");
                   return index >= state.lists.length
                       ? SizedBox(
                           width: 70,
@@ -118,7 +115,6 @@ class MovieCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Alog.debug("MovieCardWidget - data.image: ${data.image}");
     return Container(
       width: 130,
       padding: EdgeInsets.all(5.0),

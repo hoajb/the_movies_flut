@@ -41,8 +41,6 @@ class MovieListBloc {
       MovieListState currentState = _lastState;
       if (currentState is InMovieListState) {
         var nextPage = currentState.currentPage + 1;
-        Alog.debug(
-            "LoadMoreMovieListEvent: currentSize[${currentState.lists.length}] [nextpage = $nextPage]");
         final posts = await Repository.getMovieListByType(listType, nextPage);
         currentState.lists.addAll(posts);
         prepareState = InMovieListState(currentState.lists, nextPage);

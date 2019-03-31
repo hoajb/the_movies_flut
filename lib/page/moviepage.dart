@@ -108,7 +108,7 @@ class MovieTileState extends State<MovieTile> {
     }
     return Stack(
       children: <Widget>[
-        Image.network(API.UrlBaseImage + _listData[index].poster_path),
+        Image.network(API.urlBaseImage + _listData[index].poster_path),
 //        Align(
 //          alignment: Alignment.center,
 //          child: FadeInImage.assetNetwork(

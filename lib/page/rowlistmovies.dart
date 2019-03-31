@@ -90,7 +90,6 @@ class _MoviesListState extends State<MoviesList> {
         itemBuilder: (BuildContext context, int index) {
           if (_listData.length > 0 && index == _listData.length - 3) {
             _fetchData(++_page);
-            Alog.debug("fetch page = $_page");
           }
 
           if (_listData.length > 0 && index == _listData.length - 1) {

@@ -11,16 +11,14 @@ import 'package:the_movies_flut/util/alog.dart';
 
 class API {
   static final HttpClient _httpClient = HttpClient();
-  static final String _url_seedin = "qa.newunionplayground.com";
-  static final String _url = "api.themoviedb.org";
-  static final String _url_prefix = "/3";
-  static final String _url_api_key = "1f5b86b5d2ec241ec5863bc7941fad12";
+  static final String _urlBase = "api.themoviedb.org";
+  static final String _urlPrefix = "/3";
+  static final String _urlApiKey = "1f5b86b5d2ec241ec5863bc7941fad12";
 
-  static String get UrlBaseImage => "https://image.tmdb.org/t/p/w500";
+  static String get urlBaseImage => "https://image.tmdb.org/t/p/w500";
 
   static Future<Map<String, dynamic>> _getJson(Uri uri) async {
     try {
-//      print(uri);
       Alog.debug(uri);
       final httpRequest = await _httpClient.getUrl(uri);
       final httpResponse = await httpRequest.close();
@@ -31,7 +29,7 @@ class API {
       final responseBody = await httpResponse.transform(utf8.decoder).join();
       return json.decode(responseBody);
     } on Exception catch (e) {
-      print('$e');
+      Alog.debug('$e');
       return null;
     }
   }
@@ -43,29 +41,29 @@ class API {
 
     switch (type) {
       case ApiMovieListType.Playing:
-        uri = Uri.https(_url, _url_prefix + '/movie/now_playing',
-            {'page': page.toString(), 'api_key': _url_api_key});
+        uri = Uri.https(_urlBase, _urlPrefix + '/movie/now_playing',
+            {'page': page.toString(), 'api_key': _urlApiKey});
         break;
 
       case ApiMovieListType.Popularity:
-        uri = Uri.https(_url, _url_prefix + '/discover/movie', {
+        uri = Uri.https(_urlBase, _urlPrefix + '/discover/movie', {
           'page': page.toString(),
-          'api_key': _url_api_key,
+          'api_key': _urlApiKey,
           'sort_by': 'popularity.desc'
         });
         break;
 
       case ApiMovieListType.Ontv:
-        uri = Uri.https(_url, _url_prefix + '/discover/tv', {
+        uri = Uri.https(_urlBase, _urlPrefix + '/discover/tv', {
           'page': page.toString(),
-          'api_key': _url_api_key,
+          'api_key': _urlApiKey,
           'sort_by': 'popularity.desc'
         });
         break;
 
       case ApiMovieListType.Netflix:
-        uri = Uri.https(_url, _url_prefix + '/movie/now_playing',
-            {'page': page.toString(), 'api_key': _url_api_key});
+        uri = Uri.https(_urlBase, _urlPrefix + '/movie/now_playing',
+            {'page': page.toString(), 'api_key': _urlApiKey});
         break;
     }
 
@@ -91,29 +89,29 @@ class API {
 
     switch (type) {
       case ApiMovieListType.Playing:
-        uri = Uri.https(_url, _url_prefix + '/movie/now_playing',
-            {'page': page.toString(), 'api_key': _url_api_key});
+        uri = Uri.https(_urlBase, _urlPrefix + '/movie/now_playing',
+            {'page': page.toString(), 'api_key': _urlApiKey});
         break;
 
       case ApiMovieListType.Popularity:
-        uri = Uri.https(_url, _url_prefix + '/discover/movie', {
+        uri = Uri.https(_urlBase, _urlPrefix + '/discover/movie', {
           'page': page.toString(),
-          'api_key': _url_api_key,
+          'api_key': _urlApiKey,
           'sort_by': 'popularity.desc'
         });
         break;
 
       case ApiMovieListType.Ontv:
-        uri = Uri.https(_url, _url_prefix + '/discover/tv', {
+        uri = Uri.https(_urlBase, _urlPrefix + '/discover/tv', {
           'page': page.toString(),
-          'api_key': _url_api_key,
+          'api_key': _urlApiKey,
           'sort_by': 'popularity.desc'
         });
         break;
 
       case ApiMovieListType.Netflix:
-        uri = Uri.https(_url, _url_prefix + '/movie/now_playing',
-            {'page': page.toString(), 'api_key': _url_api_key});
+        uri = Uri.https(_urlBase, _urlPrefix + '/movie/now_playing',
+            {'page': page.toString(), 'api_key': _urlApiKey});
         break;
     }
 
@@ -148,9 +146,9 @@ class API {
     Uri uri;
 
     if (type == ApiMovieListType.Ontv) {
-      uri = Uri.https(_url, _url_prefix + '/discover/tv', {
+      uri = Uri.https(_urlBase, _urlPrefix + '/discover/tv', {
         'page': page.toString(),
-        'api_key': _url_api_key,
+        'api_key': _urlApiKey,
         'sort_by': 'popularity.desc'
       });
       final jsonResponse = await _getJson(uri);
@@ -189,9 +187,9 @@ class API {
     Uri uri;
 
     if (type == ApiMovieListType.Ontv) {
-      uri = Uri.https(_url, _url_prefix + '/discover/tv', {
+      uri = Uri.https(_urlBase, _urlPrefix + '/discover/tv', {
         'page': page.toString(),
-        'api_key': _url_api_key,
+        'api_key': _urlApiKey,
         'sort_by': 'popularity.desc'
       });
       final jsonResponse = await _getJson(uri);
@@ -215,9 +213,9 @@ class API {
 
   static Future<List<Person>> getPopularPerson(int page) async {
     Uri uri;
-    uri = Uri.https(_url, _url_prefix + '/person/popular', {
+    uri = Uri.https(_urlBase, _urlPrefix + '/person/popular', {
       'page': page.toString(),
-      'api_key': _url_api_key,
+      'api_key': _urlApiKey,
     });
     final jsonResponse = await _getJson(uri);
     if (jsonResponse == null) {

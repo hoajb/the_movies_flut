@@ -5,7 +5,6 @@ import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
 import 'package:the_movies_flut/api/repository.dart';
 import 'package:the_movies_flut/bloc/listdatastate.dart';
 import 'package:the_movies_flut/bloc/movies_event.dart';
-import 'package:the_movies_flut/util/alog.dart';
 
 class MoviesBloc extends Bloc<MoviesEvent, ListDataState> {
   final ApiMovieListType listType;
@@ -17,7 +16,6 @@ class MoviesBloc extends Bloc<MoviesEvent, ListDataState> {
 
   @override
   Stream<ListDataState> mapEventToState(MoviesEvent event) async* {
-    Alog.debug("mapEventToState : $event");
 
     if (event is FetchEvent) {
       if (!_hasReachedMax(currentState)) {
@@ -38,11 +36,7 @@ class MoviesBloc extends Bloc<MoviesEvent, ListDataState> {
             final posts =
                 await Repository.getMovieListByType(listType, nextPage);
 
-            var length = posts.length;
-            Alog.debug("getMovieListByType : $nextPage - size : $length");
-
             if (posts.isEmpty) {
-              Alog.debug("ListLoaded :posts.isEmpty - hasReachedMax : true");
               yield ListLoaded(
                   lists: currentListState.lists,
                   hasReachedMax: true,

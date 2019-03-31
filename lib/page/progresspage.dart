@@ -63,14 +63,8 @@ class _ProgressPageState extends State<ProgressPage> {
               child: ListView.builder(
                 physics: ClampingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
-                  Alog.debug("ListView index :" +
-                      index.toString() +
-                      "/" +
-                      state.lists.length.toString());
                   if (state.lists.length > 0 &&
                       index == state.lists.length - 2) {
-                    Alog.debug("ListView -- loadmore: " +
-                        state.lists.length.toString());
                     _moviesBloc.dispatch(FetchEvent());
                   }
                   return index >= state.lists.length
