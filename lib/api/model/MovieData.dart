@@ -35,7 +35,7 @@ class MovieData {
 //    print(json["vote_average"]?.runtimeType);
     return new MovieData(
       vote_count: json['vote_count'].toString(),
-      id: json['id'] as num,
+      id: json['id'],
       video: json['video'],
       vote_average: json['vote_average'].toString(),
       title: json['title'].toString(),

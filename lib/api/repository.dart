@@ -5,6 +5,7 @@ import 'package:the_movies_flut/api/model/Person.dart';
 import 'package:the_movies_flut/api/model/TVShow.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
 import 'package:the_movies_flut/api/model/ui/SimplePeople.dart';
+import 'package:the_movies_flut/util/alog.dart';
 
 class Repository {
   static Future<List<SimpleMovieItem>> getMovieListByType(
@@ -66,6 +67,23 @@ class Repository {
       });
     }
   }
+
+  static Future<DataListResult<List<SimplePeople>>> getPeoplePopularList(
+      int page) {
+    var popularPerson = API.getPopularPerson2(page);
+    Alog.debug("getPopularPerson2 [$popularPerson]");
+    return popularPerson
+        .then<DataListResult<List<SimplePeople>>>((resultsList) {
+      Alog.debug("getPopularPerson2 body [$resultsList]");
+      return DataListResult<List<SimplePeople>>(
+          totalItems: resultsList.totalItems,
+          totalPages: resultsList.totalPages,
+          data: resultsList.data
+              .map((item) => SimplePeople.fromPerson(item))
+              .toList(),
+          error: ErrorResult(""));
+    });
+  }
 }
 
 class DataResult<T> {
@@ -83,6 +101,11 @@ class DataListResult<T> {
   final int totalItems;
 
   DataListResult({this.totalPages, this.totalItems, this.data, this.error});
+
+  @override
+  String toString() {
+    return "DataListResult[data=${(data as List).length} , error=$error, totalPages=$totalPages, totalItems=$totalItems]";
+  }
 }
 
 class ErrorResult {

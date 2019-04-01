@@ -12,6 +12,8 @@ class SimplePeople {
     return SimplePeople(
         id: data.id,
         name: data.name,
-        image: API.urlBaseImage + data.profilePath);
+        image: (data.profilePath != null && data.profilePath.contains(".jpg"))
+            ? API.urlBaseImage + data.profilePath
+            : "");
   }
 }

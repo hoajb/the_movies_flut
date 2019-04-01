@@ -27,6 +27,9 @@ class API {
       }
 
       final responseBody = await httpResponse.transform(utf8.decoder).join();
+
+      Alog.debug(responseBody);
+
       return json.decode(responseBody);
     } on Exception catch (e) {
       Alog.debug('$e');
@@ -209,6 +212,41 @@ class API {
     } else {
       return null;
     }
+  }
+
+  static Future<DataListResult<List<Person>>>  getPopularPerson2(int page) async {
+    Uri uri;
+    uri = Uri.https(_urlBase, _urlPrefix + '/person/popular', {
+      'page': page.toString(),
+      'api_key': _urlApiKey,
+    });
+    final jsonResponse = await _getJson(uri);
+    if (jsonResponse == null) {
+      return null;
+    }
+
+    if (jsonResponse['errors'] != null ||
+        jsonResponse['status_code'] != null ||
+        jsonResponse['status_message'] != null) {
+      //TODO ERROR
+      return DataListResult(
+          totalPages: 0,
+          totalItems: 0,
+          data: null,
+          error: ErrorResult(jsonResponse['errors']));
+    }
+    if (jsonResponse['results'] == null) {
+      return DataListResult(
+          totalPages: 0, totalItems: 0, data: null, error: ErrorResult(""));
+    }
+
+    var fromJson = PersonList.fromJson(jsonResponse);
+
+    return DataListResult(
+        totalPages: fromJson.totalPages,
+        totalItems: fromJson.totalResults,
+        data: fromJson.results,
+        error: ErrorResult(""));
   }
 
   static Future<List<Person>> getPopularPerson(int page) async {

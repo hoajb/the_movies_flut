@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/page/movie_row_list/movie_row_list_widget.dart';
+import 'package:the_movies_flut/page/people_list/people_list_widget.dart';
 import 'package:the_movies_flut/page/popularpeople.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
 
@@ -143,7 +144,7 @@ class RowPeople extends StatelessWidget {
               ],
             ),
             Expanded(
-              child: PopularPeopleRowList(),
+              child: PeopleListWidget(),
             ),
           ],
         ),

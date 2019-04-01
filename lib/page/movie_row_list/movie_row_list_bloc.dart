@@ -3,6 +3,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/api/repository.dart';
 import 'package:the_movies_flut/page/movie_row_list/movie_row_list_export.dart';
+import 'package:the_movies_flut/util/alog.dart';
 
 class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
   final ApiMovieListType listType;
@@ -59,8 +60,24 @@ class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
   }
 
   @override
+  void onTransition(
+      Transition<MovieRowListEvent, ListState> transition) {
+    Alog.debug("People[$transition]");
+    super.onTransition(transition);
+  }
+
+
+  @override
+  void onError(Object error, StackTrace stacktrace) {
+    Alog.debug("MoviesBlocError[$error]");
+    Alog.debug("MoviesBlocError------------------------------");
+    Alog.debug("MoviesBlocError[$stacktrace]");
+    super.onError(error, stacktrace);
+  }
+
+  @override
   Stream<MovieRowListEvent> transform(Stream<MovieRowListEvent> events) {
     return (events as Observable<MovieRowListEvent>)
-        .debounce(Duration(milliseconds: 500));
+        .debounce(Duration(milliseconds: 200));
   }
 }

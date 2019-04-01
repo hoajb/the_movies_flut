@@ -17,17 +17,17 @@ class Person {
       this.adult});
 
   Person.fromJson(Map<String, dynamic> json) {
-    popularity = json['popularity'];
-    id = json['id'];
-    profilePath = json['profile_path'];
-    name = json['name'];
+    popularity = json['popularity'] ?? 0;
+    id = json['id'] ?? 0;
+    profilePath = json['profile_path'] ?? "";
+    name = json['name'] ?? "";
     if (json['known_for'] != null) {
       knownFor = new List<MovieData>();
       json['known_for'].forEach((v) {
         knownFor.add(MovieData.fromJson(v));
       });
     }
-    adult = json['adult'];
+    adult = json['adult'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -52,8 +52,16 @@ class Person {
 
 class PersonList {
   List<Person> results;
+  int page;
+  int totalPages;
+  int totalResults;
 
-  PersonList({this.results});
+  PersonList({
+    this.results,
+    this.page,
+    this.totalPages,
+    this.totalResults,
+  });
 
   static PersonList fromJson(Map<String, dynamic> json) {
     var resultsJson = json['results'];
@@ -62,10 +70,19 @@ class PersonList {
     var listData = resultsList != null
         ? resultsList.map((child) => Person.fromJson(child))?.toList()
         : List();
-    return PersonList(results: listData);
+    return PersonList(
+        results: listData,
+        page: json['page'],
+        totalPages: json['total_pages'],
+        totalResults: json['total_results']);
   }
 
-  Map<String, dynamic> toJson() => {'results': results};
+  Map<String, dynamic> toJson() => {
+        'results': results,
+        'page': page,
+        'total_pages': totalPages,
+        'total_results': totalResults,
+      };
 }
 
 /**
