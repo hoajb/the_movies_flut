@@ -33,6 +33,7 @@ class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
       } else if (event is FetchMoreEvent) {
         if (currentState is FetchedListState) {
           var fetchedState = currentState as FetchedListState;
+          
           if (fetchedState.hasLoadMore) {
             var nextPage = fetchedState.currentPage + 1;
             final posts =
@@ -54,18 +55,16 @@ class MoviesBloc extends Bloc<MovieRowListEvent, ListState> {
         }
       }
     } catch (_) {
-      yield ErrorListState(_);
+      yield ErrorListState(_.toString());
       return;
     }
   }
 
   @override
-  void onTransition(
-      Transition<MovieRowListEvent, ListState> transition) {
+  void onTransition(Transition<MovieRowListEvent, ListState> transition) {
     Alog.debug("People[$transition]");
     super.onTransition(transition);
   }
-
 
   @override
   void onError(Object error, StackTrace stacktrace) {

@@ -4,7 +4,6 @@ import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
 import 'package:the_movies_flut/page/movie_row_list/movie_row_list_export.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
-import 'package:the_movies_flut/util/alog.dart';
 
 class MovieRowListWidget extends StatefulWidget {
   final ApiMovieListType listType;
@@ -42,18 +41,29 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
           }
 
           if (state is ErrorListState) {
-            return Center(
-              child: Column(
-                children: <Widget>[
-                  Text(state.toString()),
-                  FlatButton(
-                    onPressed: () {
-                      _moviesBloc.dispatch(FetchInitEvent());
-                    },
-                    child: Text("Retry"),
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  state.toString(),
+                  style: TextStyle(
+                      color: Colors.white70, fontStyle: FontStyle.italic),
+                ),
+                SizedBox(
+                  height: 8.0,
+                ),
+                RawMaterialButton(
+                  fillColor: AppColors.colorThemeAccent[400],
+                  highlightColor: AppColors.colorThemeAccent[300],
+                  onPressed: () {
+                    _moviesBloc.dispatch(FetchInitEvent());
+                  },
+                  child: Text(
+                    "Retry",
+                    style: TextStyle(color: Colors.white70),
                   ),
-                ],
-              ),
+                ),
+              ],
             );
           }
 

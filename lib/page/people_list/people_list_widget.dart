@@ -43,15 +43,17 @@ class _PeopleListWidgetState extends State<PeopleListWidget> {
           }
 
           if (state is ErrorPeopleListState) {
-            Alog.debug("ErrorPeopleListState[$state]");
             return Center(
               child: Column(
-                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text(
                     state.toString(),
                     style: TextStyle(
                         color: Colors.white70, fontStyle: FontStyle.italic),
+                  ),
+                  SizedBox(
+                    height: 8.0,
                   ),
                   RawMaterialButton(
                     fillColor: AppColors.colorThemeAccent[400],
