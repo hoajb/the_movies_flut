@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleBanner.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
 import 'package:the_movies_flut/page/movie_details_screen/backdrop_pageview.dart';
+import 'package:the_movies_flut/resource/app_resources.dart';
 import 'package:the_movies_flut/widget/my_flexible_space_bar.dart';
 
 class AppBarDetailsMovie extends StatelessWidget {
@@ -20,6 +21,11 @@ class AppBarDetailsMovie extends StatelessWidget {
     return SimpleBanners(simpleData.id, bannerList);
   }
 
+  final heightTitle = 50.0;
+  final height = 350.0;
+  final radiusPoster = 60.0;
+  final sizeCirclePadding = 5.0;
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
@@ -29,7 +35,7 @@ class AppBarDetailsMovie extends StatelessWidget {
         title: simpleData.title,
         opacity: opacity,
       ),
-      expandedHeight: 250.0,
+      expandedHeight: height,
       flexibleSpace: MyFlexibleSpaceBar(
         centerTitle: false,
         opacityNotifier: opacity,
@@ -37,8 +43,43 @@ class AppBarDetailsMovie extends StatelessWidget {
           simpleData.title,
           style: TextStyle(color: Colors.white, fontSize: 20),
         ),
-        background: BackdropPageView(
-          banners: getBanners(),
+        background: Padding(
+          padding: EdgeInsets.only(bottom: heightTitle),
+          child: Stack(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(bottom: radiusPoster),
+                child: BackdropPageView(
+                  banners: getBanners(),
+                ),
+              ),
+              Align(
+                alignment: Alignment(-1, 1),
+                child: Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Stack(
+                    children: <Widget>[
+                      ClipOval(
+                        child: Container(
+                          width: (radiusPoster + sizeCirclePadding) * 2,
+                          height: (radiusPoster + sizeCirclePadding) * 2,
+                          color: AppColors.colorThemePrimary,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(sizeCirclePadding),
+                        child: CircleAvatar(
+                          radius: radiusPoster,
+                          backgroundImage: NetworkImage(simpleData.image),
+                          backgroundColor: Colors.transparent,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

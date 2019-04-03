@@ -16,7 +16,6 @@ class BackdropPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 500,
       child: Stack(
         children: <Widget>[
           PageView(
@@ -31,9 +30,9 @@ class BackdropPageView extends StatelessWidget {
               child: PageViewIndicator(
                 pageIndexNotifier: pageIndexNotifier,
                 length: getSize(),
-                indicatorPadding: EdgeInsets.all(2.0),
+                indicatorPadding: EdgeInsets.all(1.0),
                 normalBuilder: (animationController, index) => Circle(
-                      size: 8.0,
+                      size: 6.0,
                       color: Colors.white70,
                     ),
                 highlightedBuilder: (animationController, index) =>
@@ -43,13 +42,13 @@ class BackdropPageView extends StatelessWidget {
                         curve: Curves.ease,
                       ),
                       child: Circle(
-                        size: 12.0,
+                        size: 8.0,
                         color: Colors.white70,
                       ),
                     ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -58,10 +57,12 @@ class BackdropPageView extends StatelessWidget {
   Widget getItemsWidget(SimpleBanner item) {
     return Stack(
       children: <Widget>[
-        Center(
+        Container(
+          color: Colors.red,
+          alignment: AlignmentDirectional(0, 0),
           child: Image.network(
             item.image,
-            fit: BoxFit.cover,
+            fit: BoxFit.fill,
           ),
         ),
         Center(
