@@ -12,6 +12,7 @@ class BackdropPageView extends StatelessWidget {
   }
 
   final pageIndexNotifier = ValueNotifier<int>(0);
+  static final radiusPoster = 60.0;
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,12 @@ class BackdropPageView extends StatelessWidget {
                 banners.banners.map((item) => getItemsWidget(item)).toList(),
           ),
           Align(
-            alignment: Alignment(0, 1),
+            alignment: Alignment(-1, 1),
             child: Padding(
-              padding: const EdgeInsets.all(3.0),
+              padding: EdgeInsets.only(
+                  left: radiusPoster * 2 + 10 + 20, bottom: 3.0),
               child: PageViewIndicator(
+                alignment: MainAxisAlignment.start,
                 pageIndexNotifier: pageIndexNotifier,
                 length: getSize(),
                 indicatorPadding: EdgeInsets.all(1.0),
@@ -58,7 +61,7 @@ class BackdropPageView extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          color: Colors.red,
+          color: Colors.transparent,
           alignment: AlignmentDirectional(0, 0),
           child: Image.network(
             item.image,
@@ -66,9 +69,13 @@ class BackdropPageView extends StatelessWidget {
           ),
         ),
         Center(
-            child: Text(
-          item.image,
-          style: TextStyle(color: Colors.white),
+            child: FloatingActionButton(
+          child: Icon(
+            Icons.play_arrow,
+            size: 56,
+          ),
+          backgroundColor: Colors.black38,
+          onPressed: () => {},
         )),
       ],
     );

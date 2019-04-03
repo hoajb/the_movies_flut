@@ -21,17 +21,17 @@ class AppBarDetailsMovie extends StatelessWidget {
     return SimpleBanners(simpleData.id, bannerList);
   }
 
-  final heightTitle = 50.0;
-  final height = 350.0;
-  final radiusPoster = 60.0;
-  final sizeCirclePadding = 5.0;
+  static final heightTitle = 100.0;
+  static final height = 450.0;
+  static final radiusPoster = 60.0;
+  static final sizeCirclePadding = 5.0;
 
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       centerTitle: false,
       pinned: true,
-      title: TitleWidget(
+      title: TitleAppBarOpacityWidget(
         title: simpleData.title,
         opacity: opacity,
       ),
@@ -39,10 +39,7 @@ class AppBarDetailsMovie extends StatelessWidget {
       flexibleSpace: MyFlexibleSpaceBar(
         centerTitle: false,
         opacityNotifier: opacity,
-        title: Text(
-          simpleData.title,
-          style: TextStyle(color: Colors.white, fontSize: 20),
-        ),
+        title: TitleMovie(simpleData: simpleData),
         background: Padding(
           padding: EdgeInsets.only(bottom: heightTitle),
           child: Stack(
@@ -54,24 +51,83 @@ class AppBarDetailsMovie extends StatelessWidget {
                 ),
               ),
               Align(
-                alignment: Alignment(-1, 1),
+                alignment: Alignment.bottomLeft,
                 child: Container(
                   padding: EdgeInsets.only(left: 10),
-                  child: Stack(
+                  child: Row(
                     children: <Widget>[
-                      ClipOval(
-                        child: Container(
-                          width: (radiusPoster + sizeCirclePadding) * 2,
-                          height: (radiusPoster + sizeCirclePadding) * 2,
-                          color: AppColors.colorThemePrimary,
-                        ),
+                      Stack(
+                        children: <Widget>[
+                          ClipOval(
+                            child: Container(
+                              width: (radiusPoster + sizeCirclePadding) * 2,
+                              height: (radiusPoster + sizeCirclePadding) * 2,
+                              color: AppColors.colorThemePrimary,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.all(sizeCirclePadding),
+                            child: CircleAvatar(
+                              radius: radiusPoster,
+                              backgroundImage: NetworkImage(simpleData.image),
+                              backgroundColor: Colors.transparent,
+                            ),
+                          ),
+                        ],
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(sizeCirclePadding),
-                        child: CircleAvatar(
-                          radius: radiusPoster,
-                          backgroundImage: NetworkImage(simpleData.image),
-                          backgroundColor: Colors.transparent,
+                      Expanded(
+                        child: Container(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 60, right: 10),
+                          child: Row(
+                            children: <Widget>[
+                              SizedBox(
+                                height: 30,
+                                child: RaisedButton(
+                                  color: Colors.transparent,
+                                  highlightColor:
+                                      AppColors.colorThemePrimary[100],
+                                  onPressed: () {},
+                                  child: Icon(
+                                    Icons.check,
+                                    color: Colors.white70,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          style: BorderStyle.solid,
+                                          width: 1.5,
+                                          color: Colors.white70),
+                                      borderRadius: BorderRadiusDirectional.all(
+                                          Radius.circular(20.0))),
+                                ),
+                              ),
+                              Spacer(
+                                flex: 1,
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.favorite_border,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.bookmark_border,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.playlist_add,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
+                          ),
+                          color: Colors.transparent,
                         ),
                       ),
                     ],
@@ -86,17 +142,88 @@ class AppBarDetailsMovie extends StatelessWidget {
   }
 }
 
-class TitleWidget extends StatefulWidget {
+class TitleMovie extends StatelessWidget {
+  static final heightTitle = 100.0;
+  final SimpleMovieItem simpleData;
+
+  const TitleMovie({Key key, this.simpleData}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 10, right: 10),
+      height: heightTitle,
+      alignment: Alignment.bottomLeft,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(
+                "2019",
+                style: TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+              SizedBox(
+                width: 8,
+              ),
+              Text(
+                "60m",
+                style: TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+              Container(
+                margin: const EdgeInsets.only(left: 15),
+                padding: const EdgeInsets.only(
+                    top: 1.0, bottom: 1.0, left: 5, right: 5),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      width: 1.0, color: AppColors.colorThemePrimary[400]),
+                  borderRadius: BorderRadius.all(Radius.circular(
+                          10.0) //                 <--- border radius here
+                      ),
+                ),
+                child: Text(
+                  "Returning Series",
+                  style: TextStyle(
+                      color: AppColors.colorThemePrimary[400], fontSize: 12),
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Text(
+            simpleData.title,
+            style: TextStyle(color: Colors.white, fontSize: 24),
+          ),
+          SizedBox(
+            height: 8.0,
+          ),
+          Text(
+            "Action & Adventure, Sci-Fi & Fantasy",
+            style: TextStyle(
+                color: AppColors.colorThemePrimary[400], fontSize: 12),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TitleAppBarOpacityWidget extends StatefulWidget {
   final String title;
   final ValueNotifier<double> opacity;
 
-  const TitleWidget({Key key, this.title, this.opacity}) : super(key: key);
+  const TitleAppBarOpacityWidget({Key key, this.title, this.opacity})
+      : super(key: key);
 
   @override
-  _TitleWidgetState createState() => _TitleWidgetState();
+  _TitleAppBarOpacityWidgetState createState() =>
+      _TitleAppBarOpacityWidgetState();
 }
 
-class _TitleWidgetState extends State<TitleWidget> {
+class _TitleAppBarOpacityWidgetState extends State<TitleAppBarOpacityWidget> {
   double op = 0.0;
 
   @override
