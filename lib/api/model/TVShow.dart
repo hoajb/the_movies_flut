@@ -32,13 +32,13 @@ class TVShowData {
     originalName = json['original_name'];
     genreIds = json['genre_ids'].cast<int>();
     name = json['name'];
-    popularity = json['popularity'];
+    popularity = json['popularity'].toDouble();
     originCountry = json['origin_country'].cast<String>();
     voteCount = json['vote_count'].toDouble();
     firstAirDate = json['first_air_date'];
     backdropPath = json['backdrop_path'];
     originalLanguage = json['original_language'];
-    id = json['id'];
+    id = json['id'] as int;
     voteAverage = json['vote_average'].toDouble();
     overview = json['overview'];
     posterPath = json['poster_path'];

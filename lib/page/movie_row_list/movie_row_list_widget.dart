@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:the_movies_flut/api/filter/APIFilter.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
+import 'package:the_movies_flut/page/movie_details_screen/movie_detail_screen.dart';
 import 'package:the_movies_flut/page/movie_row_list/movie_row_list_export.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
 
@@ -97,7 +98,17 @@ class _MovieRowListWidgetState extends State<MovieRowListWidget> {
                             ],
                           ),
                         )
-                      : MovieCardWidget(data: state.lists[index]);
+                      : GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MovieDetailsScreen(
+                                      simpleData: state.lists[index])),
+                            );
+                          },
+                          child: MovieCardWidget(data: state.lists[index]),
+                        );
                 },
                 scrollDirection: Axis.horizontal,
                 itemCount: state.hasLoadMore
