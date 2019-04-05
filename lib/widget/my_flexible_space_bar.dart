@@ -163,7 +163,7 @@ class _MyFlexibleSpaceBarState extends State<MyFlexibleSpaceBar> {
             top: _getCollapsePadding(t, settings),
             left: 0.0,
             right: 0.0,
-            height: settings.maxExtent,
+            height: settings.maxExtent - 100,
             child: Opacity(opacity: opacity, child: widget.background)));
       }
     }

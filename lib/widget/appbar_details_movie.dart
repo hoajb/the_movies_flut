@@ -5,26 +5,28 @@ import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
 import 'package:the_movies_flut/page/movie_details_screen/backdrop_pageview.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
 import 'package:the_movies_flut/widget/my_flexible_space_bar.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class AppBarDetailsMovie extends StatelessWidget {
+  final Widget tabBar;
   final SimpleMovieItem simpleData;
 
   final opacity = ValueNotifier<double>(0.0);
 
-  AppBarDetailsMovie({Key key, this.simpleData}) : super(key: key);
+  AppBarDetailsMovie({Key key, this.simpleData, this.tabBar}) : super(key: key);
 
   SimpleBanners getBanners() {
     var bannerList = List<SimpleBanner>();
     for (var i = 0; i < 5; i++) {
-      bannerList.add(SimpleBanner(simpleData.image));
+      bannerList.add(SimpleBanner("https://images5.alphacoders.com/545/545768.jpg"));
     }
     return SimpleBanners(simpleData.id, bannerList);
   }
 
-  static final heightTitle = 100.0;
-  static final height = 450.0;
-  static final radiusPoster = 60.0;
-  static final sizeCirclePadding = 5.0;
+  static final height = 300.0;
+  static final radiusPoster = height / 7;
+  static final heightTitle = radiusPoster * 2;
+  static final sizeCirclePadding = radiusPoster / 10;
 
   @override
   Widget build(BuildContext context) {
@@ -40,104 +42,102 @@ class AppBarDetailsMovie extends StatelessWidget {
         centerTitle: false,
         opacityNotifier: opacity,
         title: TitleMovie(simpleData: simpleData),
-        background: Padding(
-          padding: EdgeInsets.only(bottom: heightTitle),
-          child: Stack(
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(bottom: radiusPoster),
-                child: BackdropPageView(
-                  banners: getBanners(),
-                ),
+        background: Stack(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(bottom: radiusPoster),
+              child: BackdropPageView(
+                banners: getBanners(),
               ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  padding: EdgeInsets.only(left: 10),
-                  child: Row(
-                    children: <Widget>[
-                      Stack(
-                        children: <Widget>[
-                          ClipOval(
-                            child: Container(
-                              width: (radiusPoster + sizeCirclePadding) * 2,
-                              height: (radiusPoster + sizeCirclePadding) * 2,
-                              color: AppColors.colorThemePrimary,
-                            ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                padding: EdgeInsets.only(left: 10),
+                child: Row(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        ClipOval(
+                          child: Container(
+                            width: (radiusPoster + sizeCirclePadding) * 2,
+                            height: (radiusPoster + sizeCirclePadding) * 2,
+                            color: AppColors.colorThemePrimary,
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(sizeCirclePadding),
-                            child: CircleAvatar(
-                              radius: radiusPoster,
-                              backgroundImage: NetworkImage(simpleData.image),
-                              backgroundColor: Colors.transparent,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: Container(
-                          padding:
-                              EdgeInsets.only(left: 10, top: 60, right: 10),
-                          child: Row(
-                            children: <Widget>[
-                              SizedBox(
-                                height: 30,
-                                child: RaisedButton(
-                                  color: Colors.transparent,
-                                  highlightColor:
-                                      AppColors.colorThemePrimary[100],
-                                  onPressed: () {},
-                                  child: Icon(
-                                    Icons.check,
-                                    color: Colors.white70,
-                                  ),
-                                  shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          style: BorderStyle.solid,
-                                          width: 1.5,
-                                          color: Colors.white70),
-                                      borderRadius: BorderRadiusDirectional.all(
-                                          Radius.circular(20.0))),
-                                ),
-                              ),
-                              Spacer(
-                                flex: 1,
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.favorite_border,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.bookmark_border,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.playlist_add,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ],
-                          ),
-                          color: Colors.transparent,
                         ),
+                        Padding(
+                          padding: EdgeInsets.all(sizeCirclePadding),
+                          child: CircleAvatar(
+                            radius: radiusPoster,
+                            backgroundImage: NetworkImage(simpleData.image),
+                            backgroundColor: Colors.transparent,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: Container(
+                        padding:
+                            EdgeInsets.only(left: 10, top: 60, right: 10),
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(
+                              height: 25,
+                              child: RaisedButton(
+                                color: Colors.transparent,
+                                highlightColor:
+                                    AppColors.colorThemePrimary[100],
+                                onPressed: () {},
+                                child: Icon(
+                                  Icons.check,
+                                  color: Colors.white70,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        style: BorderStyle.solid,
+                                        width: 1.5,
+                                        color: Colors.white70),
+                                    borderRadius: BorderRadiusDirectional.all(
+                                        Radius.circular(20.0))),
+                              ),
+                            ),
+                            Spacer(
+                              flex: 1,
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.favorite_border,
+                                color: Colors.white70,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.bookmark_border,
+                                color: Colors.white70,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.playlist_add,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ],
+                        ),
+                        color: Colors.transparent,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
+      bottom: tabBar,
     );
   }
 }
@@ -193,8 +193,9 @@ class TitleMovie extends StatelessWidget {
           SizedBox(
             height: 8.0,
           ),
-          Text(
+          AutoSizeText(
             simpleData.title,
+            maxLines: 1,
             style: TextStyle(color: Colors.white, fontSize: 24),
           ),
           SizedBox(
