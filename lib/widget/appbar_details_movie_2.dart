@@ -1,17 +1,18 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleBanner.dart';
 import 'package:the_movies_flut/api/model/ui/SimpleMovieItem.dart';
 import 'package:the_movies_flut/page/movie_details_screen/backdrop_pageview.dart';
 import 'package:the_movies_flut/resource/app_resources.dart';
 
-class AppBarDetailsMovie extends StatelessWidget {
+class AppBarDetailsMovie2 extends StatelessWidget {
   final Widget tabBar;
   final SimpleMovieItem simpleData;
 
   final opacity = ValueNotifier<double>(0.0);
 
-  AppBarDetailsMovie({Key key, this.simpleData, this.tabBar}) : super(key: key);
+  AppBarDetailsMovie2({Key key, this.simpleData, this.tabBar}) : super(key: key);
 
   SimpleBanners getBanners() {
     var bannerList = List<SimpleBanner>();
@@ -24,6 +25,7 @@ class AppBarDetailsMovie extends StatelessWidget {
 
   static final height = 400.0;
   static final radiusPoster = height / 7;
+  static final heightTitle = radiusPoster * 2;
   static final sizeCirclePadding = radiusPoster / 10;
   static final sizeCirclePadding2 = (radiusPoster + sizeCirclePadding) * 2;
 
@@ -34,8 +36,16 @@ class AppBarDetailsMovie extends StatelessWidget {
       pinned: true,
       title: TitleAppBarOpacityWidget(
         title: simpleData.title,
+        opacity: opacity,
       ),
       expandedHeight: height,
+//      flexibleSpace: MyFlexibleSpaceBar(
+//        centerTitle: false,
+//        opacityNotifier: opacity,
+//        title: TitleMovie(simpleData: simpleData),
+//        background: Container(color: Colors.red,
+//            child: Image.network(simpleData.image)),
+//      ),
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           child: Column(
@@ -223,8 +233,10 @@ class TitleMovie extends StatelessWidget {
 
 class TitleAppBarOpacityWidget extends StatefulWidget {
   final String title;
+  final ValueNotifier<double> opacity;
 
-  const TitleAppBarOpacityWidget({Key key, this.title}) : super(key: key);
+  const TitleAppBarOpacityWidget({Key key, this.title, this.opacity})
+      : super(key: key);
 
   @override
   _TitleAppBarOpacityWidgetState createState() =>
@@ -232,22 +244,35 @@ class TitleAppBarOpacityWidget extends StatefulWidget {
 }
 
 class _TitleAppBarOpacityWidgetState extends State<TitleAppBarOpacityWidget> {
+  double op = 0.0;
+
   @override
   void initState() {
+    widget.opacity.addListener(_updateOpacity);
     super.initState();
+  }
+
+  _updateOpacity() {
+    //https://stackoverflow.com/questions/54846280/calling-setstate-during-build-without-user-interaction
+    SchedulerBinding.instance.addPostFrameCallback((_) => setState(() {
+          op = widget.opacity.value;
+        }));
   }
 
   @override
   Widget build(BuildContext context) {
-    final FlexibleSpaceBarSettings settings =
-        context.inheritFromWidgetOfExactType(FlexibleSpaceBarSettings);
+    final FlexibleSpaceBarSettings settings = context.inheritFromWidgetOfExactType(FlexibleSpaceBarSettings);
     final double deltaExtent = settings.maxExtent - settings.minExtent;
-    final double t =
-        (1.0 - (settings.currentExtent - settings.minExtent) / deltaExtent)
-            .clamp(0.0, 1.0);
+    final double t = (1.0 - (settings.currentExtent - settings.minExtent) / deltaExtent).clamp(0.0, 1.0);
     return Opacity(
       opacity: t,
       child: Text(widget.title),
     );
+  }
+
+  @override
+  void dispose() {
+    widget.opacity.removeListener(_updateOpacity);
+    super.dispose();
   }
 }
